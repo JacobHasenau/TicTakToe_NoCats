@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 
 public class TicTacToeBoard
 {
@@ -10,7 +11,7 @@ public class TicTacToeBoard
     {
         _board = new Shape?[ySize, xSize];
     }
-    
+
     public uint XSize { get { return (uint)_board.GetLength(1); } }
     public uint YSize { get { return (uint)_board.GetLength(0); } }
     
@@ -34,6 +35,11 @@ public class TicTacToeBoard
         }
 
         return count;
+    }
+
+    public ulong GetTotalSquares()
+    {
+        return XSize * YSize;
     }
 
     public bool AcceptPlayerMove(PlayerMove move)
@@ -74,60 +80,7 @@ public class TicTacToeBoard
         _board = newBoard;
     }
 
-    public bool PlayerWonOnMove(PlayerMove move, ushort neededInARow)
-    {
-        if (GetShapeCount(move.PlayerShape) < neededInARow)
-            return false;
-
-        ushort inARowFound = 0;
-        foreach(var direction in Enum.GetValues(typeof(Direction)).Cast<Direction>())
-        {
-            var playerWon = CheckDirectionForVictory(direction, move.PosY, move.PosX, move.PlayerShape, ref inARowFound, neededInARow);
-
-            if (playerWon)
-                return playerWon;
-        }
-
-        return false;
-    }
-
-    private bool CheckDirectionForVictory(Direction direction, uint currY, uint currX, Shape shape, ref ushort inARowCount, ushort neededCount)
-    {
-        if (OutOfBounds(currY, currX))
-            return false;
-
-        if (shape != GetShapeAtPosition(currY, currX))
-            return false;
-
-        inARowCount++;
-        
-        if (inARowCount >= neededCount)
-            return true;
-
-        switch(direction)
-        {
-            case Direction.Up:
-                return CheckDirectionForVictory(direction, currY + 1, currX, shape, ref inARowCount, neededCount);
-            case Direction.UpRight:
-                return CheckDirectionForVictory(direction, currY + 1, currX + 1, shape, ref inARowCount, neededCount);
-            case Direction.Right:
-                return CheckDirectionForVictory(direction, currY, currX + 1, shape, ref inARowCount, neededCount);
-            case Direction.DownRight:
-                return CheckDirectionForVictory(direction, currY -1, currX + 1, shape, ref inARowCount, neededCount);
-            case Direction.Down:
-                return CheckDirectionForVictory(direction, currY -1, currX, shape, ref inARowCount, neededCount);
-            case Direction.DownLeft:
-                return CheckDirectionForVictory(direction, currY - 1, currX - 1, shape, ref inARowCount, neededCount);
-            case Direction.Left:
-                return CheckDirectionForVictory(direction, currY, currX - 1, shape, ref inARowCount, neededCount);
-            case Direction.UpLeft:
-                return CheckDirectionForVictory(direction, currY + 1, currX - 1, shape, ref inARowCount, neededCount);
-            default:
-                throw new Exception("What. Don't be here.");
-        }
-    }
-
-    private bool OutOfBounds(uint posY, uint posX)
+    public bool OutOfBounds(uint posY, uint posX)
     {
         return posX < 0 || posY < 0 || posX >= XSize || posY >= YSize;
     }

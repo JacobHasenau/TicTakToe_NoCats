@@ -3,32 +3,29 @@ using AutoFixture.Kernel;
 using NUnit.Framework;
 using System;
 using System.Linq;
-using System.Reflection;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
 namespace Tests
 {
-    [TestFixture(3, 3, 3)]
-    [TestFixture(5, 5, 4)]
-    [TestFixture(9, 9, 5)]
-    [TestFixture(17, 17, 6)]
-    [TestFixture(33, 33, 7)]
-    [TestFixture(3, 5, 3)]
-    [TestFixture(5, 3, 3)]
-    [TestFixture(5, 9, 4)]
-    [TestFixture(9, 5, 4)]
-    public class TicTacToeBoardTests
+    [TestFixture(3, 3)]
+    [TestFixture(5, 5)]
+    [TestFixture(9, 9)]
+    [TestFixture(17, 17)]
+    [TestFixture(33, 33)]
+    [TestFixture(3, 5)]
+    [TestFixture(5, 3)]
+    [TestFixture(5, 9)]
+    [TestFixture(9, 5)]
+    public class Given_A_TicTacToeBoard
     {
         private uint _xSize, _ySize;
-        private ushort _completionNumber;
         private TicTacToeBoard _board;
 
-        public TicTacToeBoardTests(int ySize, int xSize, int completionNumber)
+        public Given_A_TicTacToeBoard(int ySize, int xSize)
         {
             _xSize = (uint)xSize;
             _ySize = (uint)ySize;
-            _completionNumber = (ushort)completionNumber;
         }
 
         [SetUp]
@@ -142,159 +139,6 @@ namespace Tests
             _board.InitializeBoard(combinedMoves);
 
             Assert.AreEqual(expectedShapeCount, _board.GetShapeCount(shape));
-        }
-
-        [Test]
-        [TestCase(Shape.Circle)]
-        [TestCase(Shape.Cross)]
-        public void And_PlayerWonOnMove_Called_For_Up_Victory_Then_Returns_True(Shape shape)
-        {
-            var playerMoves = new PlayerMove[_completionNumber];
-
-            for (uint i = 0; i < _completionNumber; i++)
-            {
-                playerMoves[i] = new PlayerMove(shape, (_completionNumber - (uint)1) - i, 0);
-            }
-
-            _board.InitializeBoard(playerMoves);
-
-            Assert.IsTrue(_board.PlayerWonOnMove(playerMoves.First(), _completionNumber));
-        }
-
-        [Test]
-        [TestCase(Shape.Circle)]
-        [TestCase(Shape.Cross)]
-        public void And_PlayerWonOnMove_Called_For_UpRight_Victory_Then_Returns_True(Shape shape)
-        {
-            var playerMoves = new PlayerMove[_completionNumber];
-
-            for (uint i = 0; i < _completionNumber; i++)
-            {
-                playerMoves[i] = new PlayerMove(shape, (_completionNumber - (uint)1) - i, i);
-            }
-
-            _board.InitializeBoard(playerMoves);
-
-            Assert.IsTrue(_board.PlayerWonOnMove(playerMoves.First(), _completionNumber));
-        }
-
-        [Test]
-        [TestCase(Shape.Circle)]
-        [TestCase(Shape.Cross)]
-        public void And_PlayerWonOnMove_Called_For_Right_Victory_Then_Returns_True(Shape shape)
-        {
-            var playerMoves = new PlayerMove[_completionNumber];
-
-            for (uint i = 0; i < _completionNumber; i++)
-            {
-                playerMoves[i] = new PlayerMove(shape, 0, i);
-            }
-
-            _board.InitializeBoard(playerMoves);
-
-            Assert.IsTrue(_board.PlayerWonOnMove(playerMoves.First(), _completionNumber));
-        }
-
-        [Test]
-        [TestCase(Shape.Circle)]
-        [TestCase(Shape.Cross)]
-        public void And_PlayerWonOnMove_Called_For_DownRight_Victory_Then_Returns_True(Shape shape)
-        {
-            var playerMoves = new PlayerMove[_completionNumber];
-
-            for (uint i = 0; i < _completionNumber; i++)
-            {
-                playerMoves[i] = new PlayerMove(shape, i, i);
-            }
-
-            _board.InitializeBoard(playerMoves);
-
-            Assert.IsTrue(_board.PlayerWonOnMove(playerMoves.First(), _completionNumber));
-        }
-
-        [Test]
-        [TestCase(Shape.Circle)]
-        [TestCase(Shape.Cross)]
-        public void And_PlayerWonOnMove_Called_For_Down_Victory_Then_Returns_True(Shape shape)
-        {
-            var playerMoves = new PlayerMove[_completionNumber];
-
-            for (uint i = 0; i < _completionNumber; i++)
-            {
-                playerMoves[i] = new PlayerMove(shape, i, 0);
-            }
-
-            _board.InitializeBoard(playerMoves);
-
-            Assert.IsTrue(_board.PlayerWonOnMove(playerMoves.First(), _completionNumber));
-        }
-
-        [Test]
-        [TestCase(Shape.Circle)]
-        [TestCase(Shape.Cross)]
-        public void And_PlayerWonOnMove_Called_For_DownLeft_Victory_Then_Returns_True(Shape shape)
-        {
-            var playerMoves = new PlayerMove[_completionNumber];
-
-            for (uint i = 0; i < _completionNumber; i++)
-            {
-                playerMoves[i] = new PlayerMove(shape, i, (_completionNumber - (uint)1) - i);
-            }
-
-            _board.InitializeBoard(playerMoves);
-
-            Assert.IsTrue(_board.PlayerWonOnMove(playerMoves.First(), _completionNumber));
-        }
-
-        [Test]
-        [TestCase(Shape.Circle)]
-        [TestCase(Shape.Cross)]
-        public void And_PlayerWonOnMove_Called_For_Left_Victory_Then_Returns_True(Shape shape)
-        {
-            var playerMoves = new PlayerMove[_completionNumber];
-
-            for (uint i = 0; i < _completionNumber; i++)
-            {
-                playerMoves[i] = new PlayerMove(shape, 0, (_completionNumber - (uint)1) - i);
-            }
-
-            _board.InitializeBoard(playerMoves);
-
-            Assert.IsTrue(_board.PlayerWonOnMove(playerMoves.First(), _completionNumber));
-        }
-
-        [Test]
-        [TestCase(Shape.Circle)]
-        [TestCase(Shape.Cross)]
-        public void And_PlayerWonOnMove_Called_For_UpLeft_Victory_Then_Returns_True(Shape shape)
-        {
-            var playerMoves = new PlayerMove[_completionNumber];
-
-            for (uint i = 0; i < _completionNumber; i++)
-            {
-                playerMoves[i] = new PlayerMove(shape, (_completionNumber - (uint)1) - i, (_completionNumber - (uint)1) - i);
-            }
-
-            _board.InitializeBoard(playerMoves);
-
-            Assert.IsTrue(_board.PlayerWonOnMove(playerMoves.First(), _completionNumber));
-        }
-
-        [Test]
-        [TestCase(Shape.Circle)]
-        [TestCase(Shape.Cross)]
-        public void And_PlayerWonOnMove_Called_For_Not_Victory_Then_Returns_False(Shape shape)
-        {
-            var playerMoves = new PlayerMove[_completionNumber - 1];
-            
-            for(uint i = 0; i < _completionNumber - 1; i++)
-            {
-                playerMoves[i] = new PlayerMove(shape, i, 0);
-            }
-
-            _board.InitializeBoard(playerMoves);
-
-            Assert.IsFalse(_board.PlayerWonOnMove(playerMoves.First(), _completionNumber));
         }
 
         [Test]
