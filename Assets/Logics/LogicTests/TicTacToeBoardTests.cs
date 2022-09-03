@@ -296,6 +296,32 @@ namespace Tests
 
             Assert.IsFalse(_board.PlayerWonOnMove(playerMoves.First(), _completionNumber));
         }
+
+        [Test]
+        public void And_DoubleBoardSize_Called_Then_Pieces_Properly_Mapped()
+        {
+            var fixture = new Fixture();
+            fixture.Customizations.Add(new PlayerMoveUniqueBuilder(_ySize, _xSize));
+            var playerMoves = fixture.CreateMany<PlayerMove>((int)_ySize * (int)_xSize).ToArray();
+
+            _board.InitializeBoard(playerMoves);
+            _board.DoubleBoardSize();
+
+            var shapesAreCorrect = true;
+            for (uint posY = 0; posY < _ySize; posY++)
+            {
+                for (uint posX = 0; posX < _xSize; posX++)
+                {
+                    shapesAreCorrect = shapesAreCorrect
+                        && _board.GetShapeAtPosition(posY * 2, posX * 2)
+                        == playerMoves.Single(x => x.PosX == posX && x.PosY == posY).PlayerShape;
+                    if (!shapesAreCorrect)
+                        break;
+                }
+            }
+
+            Assert.IsTrue(shapesAreCorrect);
+        }
     }
 
     public class UintMaxSetBuilder : ISpecimenBuilder

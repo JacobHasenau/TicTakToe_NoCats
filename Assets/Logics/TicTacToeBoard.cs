@@ -26,9 +26,9 @@ public class TicTacToeBoard
     {
         uint count = 0;
 
-        for(int yPos = 0; yPos < YSize; yPos++)
+        for(uint yPos = 0; yPos < YSize; yPos++)
         {
-            for (int xPos = 0; xPos < XSize; xPos++)
+            for (uint xPos = 0; xPos < XSize; xPos++)
                 if (_board[yPos, xPos] == shape)
                     count++;
         }
@@ -55,6 +55,23 @@ public class TicTacToeBoard
                 throw new InvalidMoveException(move, existingShape);
             }
         }
+    }
+
+    public void DoubleBoardSize()
+    {
+        var newBoard = new Shape?[(YSize * 2) - 1, (XSize * 2) - 1];
+
+        for (uint yPos = 0; yPos < YSize; yPos++)
+        {
+            for (uint xPos = 0; xPos < XSize; xPos++)
+            {
+                var shape = GetShapeAtPosition(yPos, xPos);
+                if (shape != null)
+                    newBoard[yPos * 2, xPos * 2] = shape;
+            }
+        }
+
+        _board = newBoard;
     }
 
     public bool PlayerWonOnMove(PlayerMove move, ushort neededInARow)
