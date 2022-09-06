@@ -3,17 +3,22 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+public delegate void PlayerTurnUpdate(object sender, Shape newPlayersTurn);
+
 public class TurnManager
 {
     private TicTacToeBoard _board;
     private ushort _shapesInRowToWin;
-    private IReadOnlyCollection<Shape> _playerShapes;
+    private IList<Shape> _playerShapes;
+    private short _currentTurn;
+    private PlayerTurnUpdate _onPlayerTurnUpdated;
 
     public TurnManager(TicTacToeBoard board, ushort shapesInRowToWin, IReadOnlyCollection<Shape> playerShapes)
     {
         _board = board;
         _shapesInRowToWin = shapesInRowToWin;
-        _playerShapes = playerShapes;
+        _playerShapes = playerShapes.ToList();
+        _currentTurn = 0;
     }
 
     public void PlayerMakesTurn(PlayerMove move)
@@ -28,7 +33,14 @@ public class TurnManager
         }
 
         if (!MovesLeftOnBoard())
+        {
+            _shapesInRowToWin++;
             _board.DoubleBoardSize();
+        }
+
+        _currentTurn++;
+        if (_onPlayerTurnUpdated != null)
+            _onPlayerTurnUpdated(this, GetCurrentPlayersTurn());
     }
 
     public bool PlayerWonOnMove(PlayerMove move)
@@ -36,9 +48,10 @@ public class TurnManager
         if (_board.GetShapeCount(move.PlayerShape) < _shapesInRowToWin)
             return false;
 
-        ushort inARowFound = 0;
         foreach (var direction in Enum.GetValues(typeof(Direction)).Cast<Direction>())
         {
+            ushort inARowFound = 0;
+
             var playerWon = CheckDirectionForVictory(direction, move.PosY, move.PosX, move.PlayerShape, ref inARowFound);
 
             if (playerWon)
@@ -54,6 +67,23 @@ public class TurnManager
         var usedSpaces = (ulong)_playerShapes.Sum(shape => _board.GetShapeCount(shape));
 
         return totalSpaces > usedSpaces;
+    }
+
+    public Shape GetCurrentPlayersTurn()
+    {
+        var turnCount = _currentTurn % _playerShapes.Count;
+        var newShape = _playerShapes[turnCount];
+        return newShape;
+    }
+
+    public void SubscribeToOnPlayerTurnUpdate(PlayerTurnUpdate action)
+    {
+        _onPlayerTurnUpdated += action;
+    }
+
+    public void UnsubscribeFromOnPlayerTurnUpdate(PlayerTurnUpdate action)
+    {
+        _onPlayerTurnUpdated -= action;
     }
 
     private bool CheckDirectionForVictory(Direction direction, uint currY, uint currX, Shape shape, ref ushort inARowCount)

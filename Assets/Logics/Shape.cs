@@ -1,1 +1,1 @@
-﻿public enum Shape { Circle, Cross}
+﻿public enum Shape { Circle, Cross, Triangle}

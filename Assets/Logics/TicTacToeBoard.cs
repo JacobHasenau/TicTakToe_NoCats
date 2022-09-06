@@ -20,7 +20,7 @@ public class TicTacToeBoard
         if (xPos > XSize || yPos > YSize)
             throw new ArgumentOutOfRangeException();
 
-        return _board[yPos, xPos];
+        return _board[yPos, xPos] ?? null;
     }
 
     public uint GetShapeCount(Shape shape)
