@@ -12,6 +12,7 @@ public class TurnButton : MonoBehaviour
     private uint _posX, _posY;
 
     private TurnTaken _onTurnTaken;
+    [SerializeField]
     private bool _buttonPressed = false;
     private ShapeObject _demoShape;
 

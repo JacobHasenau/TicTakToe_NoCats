@@ -13,6 +13,14 @@ public class TurnManager
     private short _currentTurn;
     private PlayerTurnUpdate _onPlayerTurnUpdated;
 
+
+    private Dictionary<Direction, Direction> _directionPairs
+        = new Dictionary<Direction, Direction>{ { Direction.Up, Direction.Down },
+                                                { Direction.UpRight, Direction.DownLeft },
+                                                { Direction.Right, Direction.Left },
+                                                { Direction.DownRight, Direction.UpLeft }
+        };
+
     public TurnManager(TicTacToeBoard board, ushort shapesInRowToWin, IReadOnlyCollection<Shape> playerShapes)
     {
         _board = board;
@@ -48,11 +56,11 @@ public class TurnManager
         if (_board.GetShapeCount(move.PlayerShape) < _shapesInRowToWin)
             return false;
 
-        foreach (var direction in Enum.GetValues(typeof(Direction)).Cast<Direction>())
+        foreach (var directions in _directionPairs)
         {
             ushort inARowFound = 0;
 
-            var playerWon = CheckDirectionForVictory(direction, move.PosY, move.PosX, move.PlayerShape, ref inARowFound);
+            var playerWon = CheckDirectionPairForVictory(directions, move.PosY, move.PosX, move.PlayerShape, ref inARowFound);
 
             if (playerWon)
                 return playerWon;
@@ -84,6 +92,43 @@ public class TurnManager
     public void UnsubscribeFromOnPlayerTurnUpdate(PlayerTurnUpdate action)
     {
         _onPlayerTurnUpdated -= action;
+    }
+
+    private bool CheckDirectionPairForVictory(KeyValuePair<Direction, Direction> directionPair, uint startingY,
+                                              uint startingX, Shape shape, ref ushort inARowCount)
+    {
+        if (_board.OutOfBounds(startingY, startingX))
+            return false;
+
+        if (shape != _board.GetShapeAtPosition(startingY, startingX))
+            return false;
+
+        inARowCount++;
+
+        if (inARowCount >= _shapesInRowToWin)
+            return true;
+
+        switch (directionPair.Key)
+        {
+            case Direction.Up:
+                {
+                    return CheckDirectionForVictory(directionPair.Key, startingY + 1, startingX, shape, ref inARowCount)
+                        || CheckDirectionForVictory(directionPair.Value, startingY - 1, startingX, shape, ref inARowCount);
+                }
+            case Direction.UpRight:
+                {
+                    return CheckDirectionForVictory(directionPair.Key, startingY + 1, startingX + 1, shape, ref inARowCount)
+                        || CheckDirectionForVictory(directionPair.Value, startingY - 1, startingX - 1, shape, ref inARowCount);
+                }
+            case Direction.Right:
+                return CheckDirectionForVictory(directionPair.Key, startingY, startingX + 1, shape, ref inARowCount)
+                    || CheckDirectionForVictory(directionPair.Value, startingY, startingX - 1, shape, ref inARowCount);
+            case Direction.DownRight:
+                return CheckDirectionForVictory(directionPair.Key, startingY - 1, startingX + 1, shape, ref inARowCount)
+                    || CheckDirectionForVictory(directionPair.Value, startingY + 1, startingX - 1, shape, ref inARowCount); ;
+            default:
+                throw new Exception("What. Don't be here.");
+        }
     }
 
     private bool CheckDirectionForVictory(Direction direction, uint currY, uint currX, Shape shape, ref ushort inARowCount)
