@@ -79,7 +79,7 @@ public class BoardTranslator : MonoBehaviour
         {
             var jsonOption = PlayerPrefs.GetString(shape.ShapeType.ToString());
             var shapeOption = JsonUtility.FromJson<ShapeSettings>(jsonOption);
-            if (shapeOption.IsActive)
+            if (shapeOption?.IsActive ?? false)
             {
                 activeShapes.Add(shape.ShapeType);
                 var shapeObject = _objectPool.SingleOrDefault(x => x.ShapeType == shape.ShapeType);

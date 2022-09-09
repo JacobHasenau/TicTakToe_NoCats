@@ -19,7 +19,7 @@ public class ShapeSettings
 
     public ShapeSettings()
     {
-        IsActive = true;
+        IsActive = false;
         RedSetting = 1;
         GreenSetting = 1;
         BlueSetting = 1;

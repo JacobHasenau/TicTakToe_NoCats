@@ -13,9 +13,5 @@ public class MainCamera : MonoBehaviour
         var serializedShapeSettings = PlayerPrefs.GetString(nameof(CameraSettings));
         var cameraSetting = JsonUtility.FromJson<CameraSettings>(serializedShapeSettings) ?? new CameraSettings();
         _camera.backgroundColor = new Color(cameraSetting.RedSetting, cameraSetting.GreenSetting, cameraSetting.BlueSetting);
-
-
     }
-
-
 }
