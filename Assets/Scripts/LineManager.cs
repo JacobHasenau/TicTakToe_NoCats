@@ -12,7 +12,18 @@ public class LineManager : MonoBehaviour
     [SerializeField]
     private GameObject _verticalLinePrefab, _horizontalLinePrefab;
 
-    private List<GameObject> _verticalLines, _horizontalLines;
+    private List<GameObject> _verticalLines = new List<GameObject>(), _horizontalLines = new List<GameObject>();
+
+    public void ResetState()
+    {
+        for (int i = 0; i < _verticalLines.Count; i++)
+            Destroy(_verticalLines[i].gameObject);
+        for (int i = 0; i < _horizontalLines.Count; i++)
+            Destroy(_horizontalLines[i].gameObject);
+
+        _verticalLines = new List<GameObject>();
+        _horizontalLines = new List<GameObject>();
+    }
 
     public void UpdateLines(uint ySize, uint xSize)
     {
@@ -22,7 +33,6 @@ public class LineManager : MonoBehaviour
         CalculateNeededLinePositions(out List<Vector3> verticalLinePositions, out List<Vector3> horizontalLinePositions, ySize, xSize);
         UpdateLineObjects(verticalScale, horizontalScale, verticalLinePositions, horizontalLinePositions);
     }
-
 
     private void CalculateNeededLinePositions(out List<Vector3> verticalLinePositions, out List<Vector3> horizontalLinePositions, uint ySize, uint xSize)
     {
@@ -72,11 +82,5 @@ public class LineManager : MonoBehaviour
             else
                 currentLine.transform.localScale = verticalScale;
         }
-    }
-
-    private void Start()
-    {
-        _horizontalLines = new List<GameObject>();
-        _verticalLines = new List<GameObject>();
     }
 }

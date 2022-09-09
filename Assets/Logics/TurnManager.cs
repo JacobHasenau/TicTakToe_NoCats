@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEngine;
 
 public delegate void PlayerTurnUpdate(object sender, Shape newPlayersTurn);
+public delegate void PlayerHasWon(object sender, WinningInformation winningPlayer);
 
 public class TurnManager
 {
@@ -12,6 +13,7 @@ public class TurnManager
     private IList<Shape> _playerShapes;
     private short _currentTurn;
     private PlayerTurnUpdate _onPlayerTurnUpdated;
+    private PlayerHasWon _onPlayerWin;
 
 
     private Dictionary<Direction, Direction> _directionPairs
@@ -25,8 +27,21 @@ public class TurnManager
     {
         _board = board;
         _shapesInRowToWin = shapesInRowToWin;
-        _playerShapes = playerShapes.ToList();
+        SetActivePlayers(playerShapes);
         _currentTurn = 0;
+    }
+
+    public void ResetManager(TicTacToeBoard board, ushort shapesInRowToWin, IReadOnlyCollection<Shape> playerShapes)
+    {
+        _board = board;
+        _shapesInRowToWin = shapesInRowToWin;
+        SetActivePlayers(playerShapes);
+        _currentTurn = 0;
+    }
+
+    public void SetActivePlayers(IReadOnlyCollection<Shape> playerShapes)
+    {
+        _playerShapes = playerShapes.ToList();
     }
 
     public void PlayerMakesTurn(PlayerMove move)
@@ -37,7 +52,8 @@ public class TurnManager
         if (PlayerWonOnMove(move))
         {
             Debug.Log($"Player {move.PlayerShape} has won! Throwing an exception until you make win/loss screen.");
-            throw new EntryPointNotFoundException("Im that cool exception for win/loss");
+            _onPlayerWin(this, new WinningInformation(_playerShapes.ToList(), move.PlayerShape, _currentTurn));
+            return;
         }
 
         if (!MovesLeftOnBoard())
@@ -92,6 +108,17 @@ public class TurnManager
     public void UnsubscribeFromOnPlayerTurnUpdate(PlayerTurnUpdate action)
     {
         _onPlayerTurnUpdated -= action;
+    }
+
+
+    public void SubscribeToOnPlayerWin(PlayerHasWon action)
+    {
+        _onPlayerWin += action;
+    }
+
+    public void UnsubscribeFromOnPlayerWin(PlayerHasWon action)
+    {
+        _onPlayerWin -= action;
     }
 
     private bool CheckDirectionPairForVictory(KeyValuePair<Direction, Direction> directionPair, uint startingY,

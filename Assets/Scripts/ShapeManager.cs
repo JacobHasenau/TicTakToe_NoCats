@@ -16,16 +16,30 @@ public class ShapeManager : MonoBehaviour
     private TicTacToeBoard _board;
     private TurnTaken _updateAction;
 
-    private List<ShapeObject> _shapeObjects;
-    private List<TurnButton> _buttons;
+    private List<ShapeObject> _shapeObjects = new List<ShapeObject>();
+    private List<TurnButton> _buttons = new List<TurnButton>();
 
     private GameObject _emptyForShapes;
     private GameObject _emptyForButtons;
 
     public void Initialize(TicTacToeBoard board, TurnTaken action)
     {
+        _updateAction = null;
+
         _board = board;
         _updateAction += action;
+
+        for (int i = 0; i < _shapeObjects.Count; i++)
+            Destroy(_shapeObjects[i].gameObject);
+
+        for (int i = 0; i < _buttons.Count; i++)
+            Destroy(_buttons[i].gameObject);
+
+        _shapeObjects = new List<ShapeObject>();
+        _buttons = new List<TurnButton>();
+
+        CreateEmptyForButtons();
+        CreateEmptyForShapes();
     }
 
     public void UpdateShapesAndButtons(Shape currentPlayersMove)
@@ -82,6 +96,7 @@ public class ShapeManager : MonoBehaviour
             var newButton = Instantiate(_buttonPrefab, positionToCheck, _buttonPrefab.transform.rotation, _emptyForButtons.transform);
             newButton.UpdatePosition(ySize, xSize);
             newButton.SubscribeToTurnTaken(_updateAction);
+            newButton.ToggleHasBeenPressed(shapeAtPosition != null);
             _buttons.Add(newButton);
         }
         else
@@ -91,23 +106,23 @@ public class ShapeManager : MonoBehaviour
         }
     }
 
-    private void Start()
+    private void CreateEmptyForShapes()
     {
-        _buttons = new List<TurnButton>();
-        _shapeObjects = new List<ShapeObject>();
-        
-        if(_emptyForButtons == null)
+        if (_emptyForShapes == null)
+        {
+            _emptyForShapes = new GameObject("ShapeHolder");
+            _emptyForShapes.transform.position = Vector2.zero;
+            _emptyForShapes.transform.parent = this.gameObject.transform;
+        }
+    }
+
+    private void CreateEmptyForButtons()
+    {
+        if (_emptyForButtons == null)
         {
             _emptyForButtons = new GameObject("ButtonHolder");
             _emptyForButtons.transform.position = Vector2.zero;
             _emptyForButtons.transform.parent = this.gameObject.transform;
-        }
-
-        if (_emptyForShapes == null)
-        {
-            _emptyForShapes= new GameObject("ShapeHolder");
-            _emptyForShapes.transform.position = Vector2.zero;
-            _emptyForShapes.transform.parent = this.gameObject.transform;
         }
     }
 }
