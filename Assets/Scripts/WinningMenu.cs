@@ -20,12 +20,22 @@ public class WinningMenu : MonoBehaviour
     {
         gameObject.SetActive(true);
         SetVictoryShape(info.WinningShape);
-        _winningText.text = $"{info.WinningShape} {GetVictoryPostFix()}";
+        _winningText.text = string.Format("{0} {1}", info.WinningShape, GetVictoryPostFix());
 
         var lossingShapes = info.PlayingShapes.Where(x => x != info.WinningShape);
-        var lossingShapesList = string.Join(", ", lossingShapes);
-        lossingShapesList = char.ToUpper(lossingShapesList.First()).ToString() + lossingShapes.Skip(1);
-        _lossingText.text = $"{lossingShapesList}, {GetLossingPostFix()}";
+        var lossingShapesToString = "";
+
+        if (lossingShapes.Count() <= 1)
+            lossingShapesToString = lossingShapes.First().ToString();
+        else if (lossingShapes.Count() == 2)
+            lossingShapesToString = string.Join(" and ", lossingShapes.Select(x => x.ToString()));
+        else
+        {
+            lossingShapesToString = string.Join(", ", lossingShapes.Select(x => x.ToString()));
+            lossingShapesToString = lossingShapesToString.Insert(lossingShapesToString.LastIndexOf(',') + 1, " and");
+        }
+        
+        _lossingText.text = string.Format("{0}, {1}", lossingShapesToString, GetLossingPostFix());
     }
 
     public void OnNewGame(bool startActive)

@@ -27,6 +27,7 @@ public class BoardTranslator : MonoBehaviour
         _lineManager.UpdateLines(_board.YSize, _board.XSize);
 
         _shapeManager.UpdateShapesAndButtons(info.WinningShape);
+        _shapeManager.ToggleInteraction(false);
         _mainCamera.orthographicSize = (Mathf.Max(_board.XSize, _board.YSize) * 3) - 1;
     }
 

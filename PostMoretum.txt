@@ -12,3 +12,6 @@ This is all to ignore some hastly written code that mashed serizlied fields toge
 A final disappoitment - the winner in the game doesn't even get a line drawn though their victory! A complete oversight on my part...
 
 all in all, a lot to imporve on. I still think there is potentional in this little game idea, and some major imporvements I could make to get it a bit more playable. Better outlining (prehapes with a shader this time?), some type of stats page, actually being able to see the rules, and more personaility (in terms of animations, sounds, art) would go a long way.
+
+Small update, later on the same day:
+I went to go build the dang thing and the board wouldn't pop up! I believe this had something to do with sprite shape managers not doing what I thought they would do (need to research that.) Regardless, I couldn't let the project down while in that state, and while I was messing around I had to make some improvements. Prehapes a more realistic time line for these projects is 2 weeks, or I just need to be more statisifed with less. The customization part of the process is uneeded, and coulda avoided a main menu all together. It would have been better to priotize the "personaility." But now, the project builds, settings actually work, and I believe the package is something I could send of and have people actually play.

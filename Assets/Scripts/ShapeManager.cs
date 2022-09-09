@@ -42,6 +42,12 @@ public class ShapeManager : MonoBehaviour
         CreateEmptyForShapes();
     }
 
+    public void ToggleInteraction(bool interaction)
+    {
+        foreach (var button in _buttons)
+            button.gameObject.SetActive(interaction);
+    }
+
     public void UpdateShapesAndButtons(Shape currentPlayersMove)
     {
         for (uint yPos = 0; yPos < _board.YSize; yPos++)

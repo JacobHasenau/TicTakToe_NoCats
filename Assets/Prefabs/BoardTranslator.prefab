@@ -45,10 +45,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _yOffset: 2.5
   _xOffset: 2.5
-  _initialScale: {x: 0.1, y: 1.25, z: 1}
-  _verticalLinePrefab: {fileID: 472318239278673737, guid: ab11660aca5641d478b545b705ae14e3,
+  _initialScale: {x: 0.09, y: 1.125, z: 1}
+  _verticalLinePrefab: {fileID: 6168939487771301144, guid: 9f9cef058fc4d5946acc206fa89911d2,
     type: 3}
-  _horizontalLinePrefab: {fileID: 988038363450600710, guid: 01cbac6015a11364aa770f5c2170069a,
+  _horizontalLinePrefab: {fileID: 1042817074875186103, guid: 443acd87a4e1e634db920ec740a34da0,
     type: 3}
 --- !u!1 &7935382721496438327
 GameObject:
@@ -66,7 +66,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &7935382721496438321
 Transform:
   m_ObjectHideFlags: 0
@@ -104,6 +104,7 @@ MonoBehaviour:
   - {fileID: 1220466423544710461, guid: d97bd2b3f8451304d8f55275e105bed4, type: 3}
   - {fileID: 8273984013474856433, guid: 76e700c08ab2b00428a7cf92632970d0, type: 3}
   - {fileID: 682428669801541083, guid: 0887c875cb89aec40840f1c07414f835, type: 3}
+  - {fileID: 5350329162018837024, guid: 23fe43ba40af44a44ba7aad1ced022b9, type: 3}
   _winningMenu: {fileID: 0}
 --- !u!1 &7935382722336285607
 GameObject:
@@ -155,3 +156,4 @@ MonoBehaviour:
   - {fileID: 1220466423544710461, guid: d97bd2b3f8451304d8f55275e105bed4, type: 3}
   - {fileID: 8273984013474856433, guid: 76e700c08ab2b00428a7cf92632970d0, type: 3}
   - {fileID: 682428669801541083, guid: 0887c875cb89aec40840f1c07414f835, type: 3}
+  - {fileID: 5350329162018837024, guid: 23fe43ba40af44a44ba7aad1ced022b9, type: 3}

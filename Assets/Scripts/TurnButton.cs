@@ -5,8 +5,6 @@ public delegate void TurnTaken(PlayerMove move);
 public class TurnButton : MonoBehaviour
 {
     [SerializeField]
-    private ushort _shapesInRowToWin = 3;
-    [SerializeField]
     private ShapeObject _currentTurnsShapePrefab;
     [SerializeField]
     private uint _posX, _posY;
@@ -46,9 +44,6 @@ public class TurnButton : MonoBehaviour
         _posX = posX;
         name = $"Button_position_{_posY}_{_posX}";
     }
-
-    private void Start() { }
-
     private void OnMouseEnter()
     {
         if (!_buttonPressed && _demoShape == null)

@@ -7,9 +7,10 @@ public class OptionsMenu : MonoBehaviour
 {
     [SerializeField]
     private Button _saveButton;
-
     [SerializeField]
     private List<PersitentSetting> _settingsToSave;
+
+    private PersitenseManager _persitenseManager;
 
     public void OnValueChange()
     {
@@ -18,9 +19,7 @@ public class OptionsMenu : MonoBehaviour
 
     public void SaveSettings()
     {
-        foreach (var setting in _settingsToSave)
-            setting.SaveSetting();
-
+        _persitenseManager.SaveSettings(_settingsToSave);
         _saveButton.interactable = false;
     }
 
@@ -32,6 +31,7 @@ public class OptionsMenu : MonoBehaviour
 
     private void Start()
     {
+        _persitenseManager = FindObjectOfType<PersitenseManager>();
         _settingsToSave = GetComponentsInChildren<PersitentSetting>().ToList();
     }
 }

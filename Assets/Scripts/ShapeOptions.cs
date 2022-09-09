@@ -55,6 +55,17 @@ public class ShapeOptions : PersitentSetting
         PlayerPrefs.Save();
     }
 
+    public override string Key => _shape.ToString();
+    public override string SerializedValue
+    {
+        get 
+        {
+            var newShapeSettings = new ShapeSettings(_isOn.isOn, _redSlider.value, _greenSlider.value, _blueSlider.value);
+            var serialziedShapeSettings = JsonUtility.ToJson(newShapeSettings);
+            return serialziedShapeSettings;
+        }
+    }
+
     private void Start()
     {
         var serializedShapeSettings = PlayerPrefs.GetString(_shape.ToString());
